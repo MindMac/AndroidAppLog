@@ -1,5 +1,6 @@
 AndroidAppLog
 ==============
+
 A tool to log method's parameters and return value. 
 
 Currently, AndroidAppLog can only parse a variable whose type is primitive, string or one dimension array which consist of primitive type or string. For other object instances, AndroidAppLog will call the *toString* method to record the variables' value.
