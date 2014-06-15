@@ -7,7 +7,6 @@ import com.mindmac.applog.adapter.DexMethodInfoAdapter;
 import com.mindmac.applog.service.LogManager;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;

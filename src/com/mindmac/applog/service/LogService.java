@@ -1,6 +1,7 @@
 package com.mindmac.applog.service;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -568,7 +569,9 @@ public class LogService {
 			Class<?> cam = Class.forName("com.android.server.am.ActivityManagerService");
 			Object am = cam.getMethod("self").invoke(null);
 			if(am != null){
-				context = (Context) cam.getDeclaredField("mContext").get(am);
+				Field contextField = cam.getDeclaredField("mContext");
+				contextField.setAccessible(true);
+				context = (Context) contextField.get(am);
 			}
 		} catch (Throwable ex) {
 			Util.bug(null, ex);
