@@ -12,11 +12,12 @@ public class Parser {
 		
 		for(int i=0; i<argLength; i++){
 			String argTypeName = argTypeNames[i];
-			if(argObjects[i] != null){
-				String argValueStr = parseObject(argTypeName, argObjects[i]);
-				formattedArgsList.add(argTypeName + " " + argValueStr);
-			}else
-				formattedArgsList.add(argTypeName + " null");
+			String argValueStr = "null";
+			if(argObjects[i] != null)
+				argValueStr = parseObject(argTypeName, argObjects[i]);
+			//formattedArgsList.add(argTypeName + " " + argValueStr);
+			formattedArgsList.add(String.format("{\"type\":\"%s\", \"content\":\"%s\"}", 
+					argTypeName, argValueStr));
 		}
 		
 		String formattedArgsStr = TextUtils.join(", ", formattedArgsList.toArray());		

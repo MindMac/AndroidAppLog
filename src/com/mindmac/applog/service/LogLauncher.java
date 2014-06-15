@@ -168,14 +168,18 @@ public class LogLauncher implements IXposedHookLoadPackage, IXposedHookZygoteIni
 		String argsValue = Parser.parseParameters(argTypeNames, param.args);
 		
 		Object returnObject = param.getResult();
+		String returnTypeName = "null";
 		String returnValue = "null";
 		if(returnObject != null){
-			String returnTypeName = method.getReturnType().getName();
+			returnTypeName = method.getReturnType().getName();
 			returnValue = Parser.parseReturnValue(returnTypeName, returnObject);
 		}
 		
-		String formattedRes = String.format("%s.%s(%s) %s", method.getDeclaringClass().getName(), 
-				method.getName(), argsValue, returnValue);
+//		String formattedRes = String.format("%s.%s(%s) %s", method.getDeclaringClass().getName(), 
+//				method.getName(), argsValue, returnValue);
+		
+		String formattedRes = String.format("{\"className:\"%s\", \"methodName\":\"%s\", \"arguments\":\"[%s]\", \"returnType\":\"%s\", \"returnValue\":\"%s\"}", 
+				method.getDeclaringClass().getName(), method.getName(), argsValue, returnTypeName, returnValue);
 		
 		Log.i(Util.LOG_TAG, formattedRes);
 	}
