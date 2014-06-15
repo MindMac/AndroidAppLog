@@ -3,10 +3,12 @@ package com.mindmac.applog.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mindmac.applog.util.Util;
+
 import android.text.TextUtils;
 
 public class Parser {
-	public static String parseParameters(String[] argTypeNames, Object[] argObjects){
+	public static String parseParameters(String[] argTypeNames, Object[] argObjects, boolean isOutputJson){
 		List<String> formattedArgsList = new ArrayList<String>();
 		int argLength = argObjects.length;
 		
@@ -15,9 +17,12 @@ public class Parser {
 			String argValueStr = "null";
 			if(argObjects[i] != null)
 				argValueStr = parseObject(argTypeName, argObjects[i]);
-			//formattedArgsList.add(argTypeName + " " + argValueStr);
-			formattedArgsList.add(String.format("{\"type\":\"%s\", \"content\":\"%s\"}", 
-					argTypeName, argValueStr));
+			if(isOutputJson)
+				formattedArgsList.add(String.format("{\"type\":\"%s\", \"content\":\"%s\"}", 
+						argTypeName, argValueStr));
+			else
+				formattedArgsList.add(argTypeName + " " + argValueStr);
+			
 		}
 		
 		String formattedArgsStr = TextUtils.join(", ", formattedArgsList.toArray());		

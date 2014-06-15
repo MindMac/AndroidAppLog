@@ -44,12 +44,14 @@ public class LogService {
 	// Database Table
 	private static final String cTablePolicy = "policy";
 	private static final String cTableApp = "app";
+	private static final String cTableSetting = "setting";
 	
 	// Database Statement
 	private static SQLiteStatement mStmtGetPolicy = null;
 	private static SQLiteStatement mStmtGetClassPolicy = null;
 	private static SQLiteStatement mStmtGetUidPolicy = null;
 	private static SQLiteStatement mStmtGetApp = null;
+	private static SQLiteStatement mStmtGetSetting = null;
 
 	
 	public static void registerLogService() {
@@ -130,8 +132,10 @@ public class LogService {
 				db.execSQL("CREATE TABLE policy (uid INTEGER NOT NULL, " +
 						"class_name TEXT NOT NULL, method_name TEXT NOT NULL, log_enable INTEGER NOT NULL)");
 				db.execSQL("CREATE TABLE app (package_name TEXT NOT NULL, hook_enable INTEGER NOT NULL)");
+				db.execSQL("CREATE TABLE setting (name TEXT NOT NULL, value TEXT NOT NULL)");
 				db.execSQL("CREATE UNIQUE INDEX idx_policy ON policy(uid, class_name, method_name)");
 				db.execSQL("CREATE UNIQUE INDEX idx_app ON app(package_name)");
+				db.execSQL("CREATE UNIQUE INDEX idx_setting ON setting(name)");
 				db.setVersion(1);
 				db.setTransactionSuccessful();
 				Util.log(null, "Database created: " + dbFile.getName());
@@ -538,6 +542,82 @@ public class LogService {
 				}
 			}
 			return deletedNum;
+		}
+
+		@Override
+		public void setSetting(String name, String value)
+				throws RemoteException {
+			if(allowAccess()){
+				try {
+					// Set database only allowed
+					SQLiteDatabase policyDb = getDatabase();
+					
+					mLock.writeLock().lock();
+					policyDb.beginTransaction();
+					try {
+						// Create record
+						ContentValues cvalues = new ContentValues();
+						cvalues.put("name", name);
+						cvalues.put("value", value);
+						policyDb.insertWithOnConflict(cTableSetting, null, cvalues, SQLiteDatabase.CONFLICT_REPLACE);
+						
+						policyDb.setTransactionSuccessful();
+					} finally {
+						try{
+							policyDb.endTransaction();
+						}finally{
+							mLock.writeLock().unlock();
+						}
+					}
+				} catch (Throwable ex) {
+					Util.bug(null, ex);
+					throw new RemoteException(ex.toString());
+				}
+			}	
+		}
+
+		@Override
+		public String getSetting(String name) throws RemoteException {
+			String value = null;
+			if(allowAccess()){
+				try {
+					SQLiteDatabase policyDb = getDatabase();
+					// Compile statement
+					if (mStmtGetSetting == null) {
+						String sql = "SELECT value FROM " + cTableSetting
+								+ " WHERE name=?";
+						mStmtGetSetting = policyDb.compileStatement(sql);
+					}
+
+					// Execute statement
+					mLock.readLock().lock();
+					policyDb.beginTransaction();
+					try {
+						try {
+							synchronized (mStmtGetSetting) {
+								mStmtGetSetting.clearBindings();
+								mStmtGetSetting.bindString(1, name);
+								value = mStmtGetSetting.simpleQueryForString();
+							}
+						} catch (SQLiteDoneException ignored) {
+							
+						}
+
+						policyDb.setTransactionSuccessful();
+					} finally {
+						try {
+							policyDb.endTransaction();
+						} finally {
+							mLock.readLock().unlock();
+						}
+					}
+				} catch (Throwable ex) {
+					Util.bug(null, ex);
+					throw new RemoteException(ex.toString());
+				}
+			}
+			
+			return value;
 		}
 
 	};

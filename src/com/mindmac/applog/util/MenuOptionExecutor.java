@@ -29,6 +29,13 @@ public class MenuOptionExecutor {
 		dlgAbout.setCancelable(true);
 		dlgAbout.show();
 	}
+	
+	public static void optionOutput(Context context, String menuStr){
+		if(menuStr.equals(context.getString(R.string.menu_json)))
+			LogManager.setSetting(Util.JSON_OUTPUT_SETTING, "true");
+		else
+			LogManager.setSetting(Util.JSON_OUTPUT_SETTING, "false");
+	}
 		
 	public static void optionLaunch(Context context, String packageName) {
 		Intent intentLaunch = context.getPackageManager().getLaunchIntentForPackage(packageName);

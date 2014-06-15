@@ -152,6 +152,27 @@ reply.writeNoException();
 reply.writeInt(_result);
 return true;
 }
+case TRANSACTION_setSetting:
+{
+data.enforceInterface(DESCRIPTOR);
+java.lang.String _arg0;
+_arg0 = data.readString();
+java.lang.String _arg1;
+_arg1 = data.readString();
+this.setSetting(_arg0, _arg1);
+reply.writeNoException();
+return true;
+}
+case TRANSACTION_getSetting:
+{
+data.enforceInterface(DESCRIPTOR);
+java.lang.String _arg0;
+_arg0 = data.readString();
+java.lang.String _result = this.getSetting(_arg0);
+reply.writeNoException();
+reply.writeString(_result);
+return true;
+}
 }
 return super.onTransact(code, data, reply, flags);
 }
@@ -337,6 +358,40 @@ _data.recycle();
 }
 return _result;
 }
+@Override public void setSetting(java.lang.String name, java.lang.String value) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeString(name);
+_data.writeString(value);
+mRemote.transact(Stub.TRANSACTION_setSetting, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
+@Override public java.lang.String getSetting(java.lang.String name) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+java.lang.String _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeString(name);
+mRemote.transact(Stub.TRANSACTION_getSetting, _data, _reply, 0);
+_reply.readException();
+_result = _reply.readString();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
 }
 static final int TRANSACTION_getLogEnable = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 static final int TRANSACTION_getLogEnableByClass = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
@@ -347,6 +402,8 @@ static final int TRANSACTION_deleteLogRecord = (android.os.IBinder.FIRST_CALL_TR
 static final int TRANSACTION_getHookEnable = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
 static final int TRANSACTION_setHookEnable = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
 static final int TRANSACTION_deleteHookRecord = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
+static final int TRANSACTION_setSetting = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
+static final int TRANSACTION_getSetting = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
 }
 public boolean getLogEnable(int uid, java.lang.String className, java.lang.String methodName) throws android.os.RemoteException;
 public long getLogEnableByClass(int uid, java.lang.String className) throws android.os.RemoteException;
@@ -357,4 +414,6 @@ public int deleteLogRecord(int uid, java.lang.String className, java.lang.String
 public boolean getHookEnable(java.lang.String packageName) throws android.os.RemoteException;
 public void setHookEnable(java.lang.String packageName, boolean isHookEnable) throws android.os.RemoteException;
 public int deleteHookRecord(java.lang.String packageName) throws android.os.RemoteException;
+public void setSetting(java.lang.String name, java.lang.String value) throws android.os.RemoteException;
+public java.lang.String getSetting(java.lang.String name) throws android.os.RemoteException;
 }

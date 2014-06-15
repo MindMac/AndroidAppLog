@@ -15,4 +15,7 @@ interface ILogService {
 	void setHookEnable(String packageName, boolean isHookEnable);
 	int deleteHookRecord(String packageName);
 	
+	void setSetting(String name, String value);
+	String getSetting(String name);
+	
 }

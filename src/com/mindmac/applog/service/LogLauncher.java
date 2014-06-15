@@ -159,13 +159,18 @@ public class LogLauncher implements IXposedHookLoadPackage, IXposedHookZygoteIni
 	}
 	
 	private static void logMethod(MethodHookParam param){
+		boolean isOutputJson = false;
+		String settingValue = LogManager.getSetting(Util.JSON_OUTPUT_SETTING);
+		if(settingValue != null && settingValue.equals("true"))
+			isOutputJson = true;
+		
 		Method method = (Method) param.method;
 		Class<?>[] argTypes = method.getParameterTypes();
 		String[] argTypeNames = new String[argTypes.length];
 		for(int i=0; i<argTypes.length; i++)
 			argTypeNames[i] = argTypes[i].getName();
 		
-		String argsValue = Parser.parseParameters(argTypeNames, param.args);
+		String argsValue = Parser.parseParameters(argTypeNames, param.args, isOutputJson);
 		
 		Object returnObject = param.getResult();
 		String returnTypeName = "null";
@@ -175,11 +180,13 @@ public class LogLauncher implements IXposedHookLoadPackage, IXposedHookZygoteIni
 			returnValue = Parser.parseReturnValue(returnTypeName, returnObject);
 		}
 		
-//		String formattedRes = String.format("%s.%s(%s) %s", method.getDeclaringClass().getName(), 
-//				method.getName(), argsValue, returnValue);
-		
-		String formattedRes = String.format("{\"className:\"%s\", \"methodName\":\"%s\", \"arguments\":\"[%s]\", \"returnType\":\"%s\", \"returnValue\":\"%s\"}", 
-				method.getDeclaringClass().getName(), method.getName(), argsValue, returnTypeName, returnValue);
+		String formattedRes = null;
+		if(isOutputJson)
+			formattedRes = String.format("{\"className:\"%s\", \"methodName\":\"%s\", \"arguments\":\"[%s]\", \"returnType\":\"%s\", \"returnValue\":\"%s\"}", 
+					method.getDeclaringClass().getName(), method.getName(), argsValue, returnTypeName, returnValue);
+		else
+			formattedRes = String.format("%s.%s(%s) %s", method.getDeclaringClass().getName(), 
+				method.getName(), argsValue, returnValue);
 		
 		Log.i(Util.LOG_TAG, formattedRes);
 	}

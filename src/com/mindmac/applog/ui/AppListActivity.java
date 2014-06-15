@@ -90,6 +90,14 @@ public class AppListActivity extends Activity{
 				AppListTask appListTask = new AppListTask();
 		        appListTask.executeOnExecutor(mExecutor, (Object) null);
 				return true;
+			case R.id.menu_output:
+				String menuStr = (String) item.getTitle();
+				if(menuStr.equals(context.getString(R.string.menu_json)))
+					item.setTitle(R.string.menu_default);
+				else if(menuStr.equals(context.getString(R.string.menu_default)))
+					item.setTitle(R.string.menu_json);
+				MenuOptionExecutor.optionOutput(context, menuStr);
+				return true;
 			case R.id.menu_all_apps:
 				// Update only the adapter data may be a better way
 				this.mCurrentShowStatus = ShowStatus.AllApps;

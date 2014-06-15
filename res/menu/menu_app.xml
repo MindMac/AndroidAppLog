@@ -4,6 +4,9 @@
         android:id="@+id/menu_refresh"
         android:title="@string/menu_refresh"/>
     <item
+        android:id="@+id/menu_output"
+        android:title="@string/menu_json"/>
+    <item
         android:id="@+id/menu_all_apps"
         android:title="@string/menu_all_apps"/>
     <item

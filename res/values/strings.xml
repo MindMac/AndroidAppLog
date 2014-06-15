@@ -15,6 +15,8 @@
     <string name="msg_enable_xposed">AndroidAppLog is not enabled by Xposed! Please ensure to install Xposed, enable AndroidAppLog and reboot your device! </string>
 
     <!-- Menu Information -->
+    <string name="menu_json">Json Output</string>
+    <string name="menu_default">Default Output</string>
     <string name="menu_all_apps">All Apps</string>
     <string name="menu_system_apps">Only System Apps</string>
     <string name="menu_user_apps">Only User Apps</string>

@@ -8,21 +8,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-import com.mindmac.applog.R;
-
-
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.os.Process;
 import android.text.TextUtils;
@@ -34,6 +23,7 @@ public class Util {
 	public static final String LOG_TAG = "AppLog";
 	public static final int ANDROID_UID = Process.SYSTEM_UID;
 	public static final String DEFAULT_PACKAGE = "default-package";
+	public static final String JSON_OUTPUT_SETTING = "json_output";
 	
 	public static final int DB_FETCH_LIMIT = 10;
 	

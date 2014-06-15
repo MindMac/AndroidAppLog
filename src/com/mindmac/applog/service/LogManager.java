@@ -215,5 +215,38 @@ public class LogManager {
 		
 		return deletedNum;
 	}
+	
+	public static void setSetting(String name, String value){
+		try{
+			ILogService iLogService = LogService.getLogServiceClient();
+			if(iLogService == null){
+				Util.log(null, SERVICE_NOT_UP);
+			}
+			else{
+				iLogService.setSetting(name, value);
+			}
+		}catch(Throwable ex){
+			Util.bug(null, ex);
+		}
+	
+	}
+	
+	public static String getSetting(String name){
+		String value = null;
+		try{
+			ILogService iLogService = LogService.getLogServiceClient();
+			if(iLogService == null){
+				Util.log(null, SERVICE_NOT_UP);
+				return null;
+			}
+			else{
+				value = iLogService.getSetting(name);
+			}
+		}catch(Throwable ex){
+			Util.bug(null, ex);
+		}
+		
+		return value;
+	}
 
 }
