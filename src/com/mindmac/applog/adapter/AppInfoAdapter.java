@@ -61,14 +61,14 @@ public class AppInfoAdapter extends ArrayAdapter<AppInfoEx>{
 		holder.tvAppName.setText(appInfoEx.getAppName());
 		
 		// Handle click event
-		holder.rlApp.setOnClickListener(new View.OnClickListener() {
+		holder.tvAppName.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				MenuOptionExecutor.optionLaunch(mContext, appInfoEx.getPackageName());
 			}
 		});
 		
-		holder.tvAppName.setOnClickListener(new View.OnClickListener() {
+		holder.rlApp.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if(appInfoEx != null){
