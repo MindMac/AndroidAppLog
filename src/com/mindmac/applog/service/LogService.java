@@ -579,43 +579,42 @@ public class LogService {
 		@Override
 		public String getSetting(String name) throws RemoteException {
 			String value = null;
-			if(allowAccess()){
-				try {
-					SQLiteDatabase policyDb = getDatabase();
-					// Compile statement
-					if (mStmtGetSetting == null) {
-						String sql = "SELECT value FROM " + cTableSetting
-								+ " WHERE name=?";
-						mStmtGetSetting = policyDb.compileStatement(sql);
-					}
-
-					// Execute statement
-					mLock.readLock().lock();
-					policyDb.beginTransaction();
-					try {
-						try {
-							synchronized (mStmtGetSetting) {
-								mStmtGetSetting.clearBindings();
-								mStmtGetSetting.bindString(1, name);
-								value = mStmtGetSetting.simpleQueryForString();
-							}
-						} catch (SQLiteDoneException ignored) {
-							
-						}
-
-						policyDb.setTransactionSuccessful();
-					} finally {
-						try {
-							policyDb.endTransaction();
-						} finally {
-							mLock.readLock().unlock();
-						}
-					}
-				} catch (Throwable ex) {
-					Util.bug(null, ex);
-					throw new RemoteException(ex.toString());
+			try {
+				SQLiteDatabase policyDb = getDatabase();
+				// Compile statement
+				if (mStmtGetSetting == null) {
+					String sql = "SELECT value FROM " + cTableSetting
+							+ " WHERE name=?";
+					mStmtGetSetting = policyDb.compileStatement(sql);
 				}
+
+				// Execute statement
+				mLock.readLock().lock();
+				policyDb.beginTransaction();
+				try {
+					try {
+						synchronized (mStmtGetSetting) {
+							mStmtGetSetting.clearBindings();
+							mStmtGetSetting.bindString(1, name);
+							value = mStmtGetSetting.simpleQueryForString();
+						}
+					} catch (SQLiteDoneException ignored) {
+						
+					}
+
+					policyDb.setTransactionSuccessful();
+				} finally {
+					try {
+						policyDb.endTransaction();
+					} finally {
+						mLock.readLock().unlock();
+					}
+				}
+			} catch (Throwable ex) {
+				Util.bug(null, ex);
+				throw new RemoteException(ex.toString());
 			}
+			
 			
 			return value;
 		}

@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadFactory;
 
 import com.mindmac.applog.R;
 import com.mindmac.applog.adapter.AppInfoAdapter;
+import com.mindmac.applog.service.LogManager;
 import com.mindmac.applog.util.AppInfoEx;
 import com.mindmac.applog.util.MenuOptionExecutor;
 import com.mindmac.applog.util.Util;
@@ -78,6 +79,11 @@ public class AppListActivity extends Activity{
 		
 		mMenu = menu;
 		menu.findItem(R.id.menu_user_apps).setEnabled(false);
+		String outputFormat = LogManager.getSetting(Util.JSON_OUTPUT_SETTING);
+		if(outputFormat != null && outputFormat.equals("true"))
+			menu.findItem(R.id.menu_output).setTitle(getString(R.string.menu_default));
+		else
+			menu.findItem(R.id.menu_output).setTitle(getString(R.string.menu_json));
 		return true;
 	}
 	

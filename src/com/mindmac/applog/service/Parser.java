@@ -3,8 +3,6 @@ package com.mindmac.applog.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mindmac.applog.util.Util;
-
 import android.text.TextUtils;
 
 public class Parser {

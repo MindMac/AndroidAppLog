@@ -161,8 +161,9 @@ public class LogLauncher implements IXposedHookLoadPackage, IXposedHookZygoteIni
 	private static void logMethod(MethodHookParam param){
 		boolean isOutputJson = false;
 		String settingValue = LogManager.getSetting(Util.JSON_OUTPUT_SETTING);
-		if(settingValue != null && settingValue.equals("true"))
+		if(settingValue != null && settingValue.equals("true")){
 			isOutputJson = true;
+		}
 		
 		Method method = (Method) param.method;
 		Class<?>[] argTypes = method.getParameterTypes();
@@ -182,7 +183,7 @@ public class LogLauncher implements IXposedHookLoadPackage, IXposedHookZygoteIni
 		
 		String formattedRes = null;
 		if(isOutputJson)
-			formattedRes = String.format("{\"className:\"%s\", \"methodName\":\"%s\", \"arguments\":\"[%s]\", \"returnType\":\"%s\", \"returnValue\":\"%s\"}", 
+			formattedRes = String.format("{\"className\":\"%s\", \"methodName\":\"%s\", \"arguments\":[%s], \"returnType\":\"%s\", \"returnValue\":\"%s\"}", 
 					method.getDeclaringClass().getName(), method.getName(), argsValue, returnTypeName, returnValue);
 		else
 			formattedRes = String.format("%s.%s(%s) %s", method.getDeclaringClass().getName(), 
