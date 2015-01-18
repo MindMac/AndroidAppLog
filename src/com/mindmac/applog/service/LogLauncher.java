@@ -70,6 +70,8 @@ public class LogLauncher implements IXposedHookLoadPackage, IXposedHookZygoteIni
 	public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
 		final ClassLoader classLoader = lpparam.classLoader;
 		ApplicationInfo appInfo = lpparam.appInfo;
+		if(appInfo == null)
+			return;
 		final int uid = appInfo.uid;
 		String packageName = appInfo.packageName;
 		
